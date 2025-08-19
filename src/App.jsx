@@ -3,6 +3,7 @@ import Contact from "./pages/Contact";
 import Home from "./pages/Home";
 import HowToDownload from "./pages/HowToDownload";
 import Movies from "./pages/Movies";
+import MovieDetails from "./pages/MovieDetails";
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/movies" element={<Movies />} />
+          <Route path="/movies/:imdbID" element={<MovieDetails />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/howtodownload" element={<HowToDownload />} />
         </Routes>
