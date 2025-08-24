@@ -20,7 +20,6 @@ const Movies = () => {
       );
       const data = await res.json();
       if (data.Search) {
-        // fetch details of each movie to access Genre and Country
         const details = await Promise.all(
           data.Search.map(async (movie) => {
             const res = await fetch(
@@ -36,7 +35,6 @@ const Movies = () => {
     fetchMovies();
   }, []);
 
-  // Filter when genre/country changes
   useEffect(() => {
     let results = movies;
     if (genre) {
@@ -83,8 +81,6 @@ const Movies = () => {
       </div>
       <SearchBar />
 
-      {/* Display static movies list (like HomeScreen) */}
-      {/* Display static movies list (like HomeScreen) */}
       <div className="p-6">
         <div className="bg-white shadow-lg rounded-lg p-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
