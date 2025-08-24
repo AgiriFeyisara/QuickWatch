@@ -7,7 +7,7 @@ const MovieList = ({ movies }) => {
       <div className="flex flex-wrap gap-6 mb-12 p-7 justify-center">
         {movies.map((movie) => (
           <div
-            key={movie.imdbID || movie.Title} // fallback if imdbID missing
+            key={movie.imdbID || movie.Title}
             className="bg-white rounded-lg shadow-md w-60"
           >
             <img
