@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import NavBar from "../components/NavBar";
+
 import SearchBar from "../components/SearchBar";
 import Footer from "../components/Footer";
 import { Link } from "react-router-dom";
@@ -10,15 +10,31 @@ const Movies = () => {
   const [filteredMovies, setFilteredMovies] = useState([]);
   const [genre, setGenre] = useState("");
   const [country, setCountry] = useState("");
+  const [year, setYear] = useState("");
 
-  const API_KEY = "8b640a2c";
+  const API_KEY = import.meta.env.VITE_OMDB_API_KEY;
+  console.log("API Key:", API_KEY);
 
   useEffect(() => {
     const fetchMovies = async () => {
+      const keywords = [
+        "a",
+        "the",
+        "love",
+        "man",
+        "war",
+        "night",
+        "day",
+        "life",
+      ];
+      const randomKeyword =
+        keywords[Math.floor(Math.random() * keywords.length)];
+
       const res = await fetch(
-        `https://www.omdbapi.com/?s=avengers&apikey=${API_KEY}`
+        `https://www.omdbapi.com/?s=${randomKeyword}&type=movie&page=1&apikey=${API_KEY}`
       );
       const data = await res.json();
+
       if (data.Search) {
         const details = await Promise.all(
           data.Search.map(async (movie) => {
@@ -28,30 +44,39 @@ const Movies = () => {
             return res.json();
           })
         );
-        setMovies(details);
-        setFilteredMovies(details);
+
+        const shuffled = details.sort(() => 0.5 - Math.random());
+
+        setMovies(shuffled);
+        setFilteredMovies(shuffled);
       }
     };
+
     fetchMovies();
   }, []);
 
   useEffect(() => {
     let results = movies;
+
     if (genre) {
       results = results.filter((m) => m.Genre?.includes(genre));
     }
     if (country) {
       results = results.filter((m) => m.Country?.includes(country));
     }
+    if (year) {
+      results = results.filter((m) => m.Year === year);
+    }
+
     setFilteredMovies(results);
-  }, [genre, country, movies]);
+  }, [genre, country, year, movies]);
 
   return (
     <div>
       <nav className="flex items-center justify-between p-4 bg-gray-900 text-white px-6">
         <h1 className="text-2xl font-semibold">Movies</h1>
         <Link to="/">
-          <div className="flex items-center gap-2 cursor-pointer">
+          <div className="flex items-center gap-2 cursor-pointer hover:text-yellow-400">
             <img src={Arrow} alt="back" className="w-4 h-4" />
             <p>Back</p>
           </div>
@@ -69,6 +94,7 @@ const Movies = () => {
             <option value="Drama">Drama</option>
           </select>
         </div>
+
         <div>
           <label className="mr-2">Filter by Country:</label>
           <select value={country} onChange={(e) => setCountry(e.target.value)}>
@@ -78,7 +104,19 @@ const Movies = () => {
             <option value="India">India</option>
           </select>
         </div>
+
+        <div>
+          <label className="mr-2">Filter by Year:</label>
+          <input
+            type="text"
+            value={year}
+            onChange={(e) => setYear(e.target.value)}
+            placeholder="e.g. 2020"
+            className="border px-2 py-1"
+          />
+        </div>
       </div>
+
       <SearchBar />
 
       <div className="p-6">
@@ -95,16 +133,25 @@ const Movies = () => {
                   className="w-full h-64 object-cover"
                 />
                 <div className="p-3">
-                  <h2 className="text-gray-900 font-semibold">{movie.Title}</h2>
+                  <Link to={`/movies/${movie.imdbID}`}>
+                    <h2 className="font-semibold cursor-pointer hover:underline">
+                      {movie.Title}
+                    </h2>
+                  </Link>
                   <p className="text-gray-600 text-sm">{movie.Genre}</p>
                   <p className="text-gray-600 text-sm">{movie.Country}</p>
+                  <p className="text-gray-600 text-sm">{movie.Year}</p>
                 </div>
               </div>
             ))}
           </div>
+
           <div className="flex justify-center mb-10">
-            <button className="bg-blue-500 text-white px-8 py-2 mt-10 rounded hover:bg-blue-600">
-              Load more movies
+            <button
+              onClick={() => window.location.reload()}
+              className="bg-blue-500 text-white px-8 py-2 mt-10 rounded hover:bg-blue-600"
+            >
+              Load more random movies
             </button>
           </div>
         </div>

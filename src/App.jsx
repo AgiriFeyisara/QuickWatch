@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import HowToDownload from "./pages/HowToDownload";
 import Movies from "./pages/Movies";
 import MovieDetails from "./pages/MovieDetails";
+import PageNotFound from "./components/PageNotFound";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route path="/movies/:imdbID" element={<MovieDetails />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/howtodownload" element={<HowToDownload />} />
+          <Route path="*" element={<PageNotFound />} />
         </Routes>
       </div>
     </BrowserRouter>

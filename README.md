@@ -1,12 +1,73 @@
-# React + Vite
+- QuickWatch Movie App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+QuickWatch is a web application built with React and Vite that allows users to explore movies, view detailed information, watch trailers, and manage a personal watchlist. The app fetches real-time movie data from the OMDb API and offers filtering by genre, country, and year.
 
-Currently, two official plugins are available:
+- Project Overview
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Finding movies and keeping track of what to watch can be overwhelming. QuickWatch provides a centralized platform where users can:
 
-## Expanding the ESLint configuration
+Discover movies randomly or via filters.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+View detailed information about each movie.
+
+Quickly access trailers on YouTube.
+
+Save movies to a personal watchlist for future viewing.
+
+This solves the problem of scattered movie information and helps users organize their movie-watching experience efficiently.
+
+- Key Features
+
+Browse Movies
+
+Fetches a list of movies using the OMDb API.
+
+Displays movie poster, title, genre, country, year, and ratings.
+
+Movie Details Page
+
+Shows full movie information including cast, plot, language, and ratings.
+
+Watch Trailer button opens a YouTube search for the movie trailer.
+
+Add to Watchlist button saves movies to localStorage to track favorites.
+
+Filter and Search
+
+Filter movies by genre, country, or year.
+
+Search bar to find specific movies (optional feature to implement).
+
+Watchlist Management
+
+Users can save favorite movies to a personal watchlist.
+
+Avoids duplicates to keep the list organized.
+
+Responsive Design
+
+Mobile-friendly layout with flexible grids for movie cards.
+
+Navigation and buttons adapt to smaller screens.
+
+Error Handling
+
+Handles API errors and missing movies gracefully.
+
+Displays friendly messages when movies cannot be fetched
+
+- Technologies Used
+
+React.js (Frontend)
+
+Vite (Project bundler)
+
+React Router (Navigation)
+
+Tailwind CSS (Styling)
+
+OMDb API (Movie data)
+
+Formik (Form Handling)
+
+LocalStorage (Watchlist management)

@@ -8,7 +8,7 @@ const HowToDownload = () => {
       <nav className="flex items-center justify-between p-4 bg-gray-900 text-white px-6 shadow-md">
         <h1 className="text-2xl font-semibold">How to Download</h1>
         <Link to="/">
-          <div className="flex items-center gap-2 cursor-pointer hover:underline">
+          <div className="flex items-center gap-2 cursor-pointer hover:underline hover:text-yellow-400">
             <img src={Arrow} alt="back" className="w-4 h-4" />
             <p>Back</p>
           </div>

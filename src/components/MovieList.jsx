@@ -1,11 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 const MovieList = ({ movies }) => {
+  const [visibleCount, setVisibleCount] = useState(8);
+
+  const visibleMovies = movies.slice(0, visibleCount);
+
+  const handleLoadMore = () => {
+    setVisibleCount((prev) => prev + 6);
+  };
+
   return (
     <div>
       <div className="flex flex-wrap gap-6 mb-12 p-7 justify-center">
-        {movies.map((movie) => (
+        {visibleMovies.map((movie) => (
           <div
             key={movie.imdbID || movie.Title}
             className="bg-white rounded-lg shadow-md w-60"
@@ -21,18 +29,22 @@ const MovieList = ({ movies }) => {
                   {movie.Title}
                 </p>
               </Link>
-
               <p className="text-gray-700">{movie.Year}</p>
             </div>
           </div>
         ))}
       </div>
 
-      <div className="flex justify-center mb-10">
-        <button className="bg-blue-500 text-white px-8 py-2 rounded hover:bg-blue-600">
-          Load more movies
-        </button>
-      </div>
+      {visibleCount < movies.length && (
+        <div className="flex justify-center mb-10">
+          <button
+            onClick={handleLoadMore}
+            className="bg-blue-500 text-white px-8 py-2 rounded hover:bg-blue-600"
+          >
+            Load more movies
+          </button>
+        </div>
+      )}
     </div>
   );
 };

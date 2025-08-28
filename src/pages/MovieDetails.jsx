@@ -1,16 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Arrow from "../assets/arrow.svg";
 
 const MovieDetails = () => {
-  const { imdbID } = useParams(); // Get the movie ID from URL
+  const { imdbID } = useParams();
+  const navigate = useNavigate();
   const [movie, setMovie] = useState(null);
   const [error, setError] = useState("");
+  const [added, setAdded] = useState(false);
+
+  useEffect(() => {
+    // Check if movie is already in watchlist
+    const watchlist = JSON.parse(localStorage.getItem("watchlist")) || [];
+    setAdded(watchlist.some((m) => m.imdbID === imdbID));
+  }, [imdbID]);
 
   useEffect(() => {
     const fetchMovie = async () => {
       try {
-        const apiKey = "8b640a2c";
+        const apiKey = import.meta.env.VITE_OMDB_API_KEY;
         const response = await fetch(
           `https://www.omdbapi.com/?i=${imdbID}&apikey=${apiKey}`
         );
@@ -30,18 +38,46 @@ const MovieDetails = () => {
     fetchMovie();
   }, [imdbID]);
 
+  const handleWatchTrailer = (title) => {
+    const query = encodeURIComponent(`${title} trailer`);
+    window.open(
+      `https://www.youtube.com/results?search_query=${query}`,
+      "_blank"
+    );
+  };
+
+  const toggleWatchlist = () => {
+    const watchlist = JSON.parse(localStorage.getItem("watchlist")) || [];
+    const movieIndex = watchlist.findIndex((m) => m.imdbID === movie.imdbID);
+
+    if (movieIndex >= 0) {
+      // Remove movie
+      watchlist.splice(movieIndex, 1);
+      localStorage.setItem("watchlist", JSON.stringify(watchlist));
+      setAdded(false);
+      alert(`${movie.Title} has been removed from your watchlist.`);
+    } else {
+      // Add movie
+      watchlist.push(movie);
+      localStorage.setItem("watchlist", JSON.stringify(watchlist));
+      setAdded(true);
+      alert(`${movie.Title} has been added to your watchlist!`);
+    }
+  };
+
   if (error) return <p className="text-red-500 text-center mt-4">{error}</p>;
   if (!movie) return <p className="text-center mt-4">Loading...</p>;
 
   return (
     <div className="bg-[#0D1B2A] min-h-screen text-white p-6">
       <div className="mb-5 flex items-center gap-5">
-        <Link to="/">
-          <div className="flex items-center gap-2 cursor-pointer">
-            <img src={Arrow} alt="back" className="w-4 h-4" />
-            <p>Back</p>
-          </div>
-        </Link>
+        <div
+          className="flex items-center gap-2 cursor-pointer"
+          onClick={() => navigate(-1)}
+        >
+          <img src={Arrow} alt="back" className="w-4 h-4" />
+          <p>Back</p>
+        </div>
       </div>
 
       <div className="flex flex-col md:flex-row gap-6">
@@ -72,12 +108,20 @@ const MovieDetails = () => {
           </p>
         </div>
       </div>
-      <div className="flex items-center gap-5">
-        <button className="bg-[#3A86FF] Text-white-400 p-3 mt-5 rounded">
+
+      <div className="flex gap-4 mt-5">
+        <button
+          className="bg-[#3A86FF] text-white px-4 py-2 rounded hover:bg-blue-600"
+          onClick={() => handleWatchTrailer(movie.Title)}
+        >
           Watch Trailer
         </button>
-        <button className="bg-[#3A86FF] Text-white-400 p-3 mt-5 rounded">
-          Add to Watch list +
+
+        <button
+          className="bg-[#3A86FF] text-white px-4 py-2 rounded hover:bg-blue-600"
+          onClick={toggleWatchlist}
+        >
+          {added ? "Remove from Watchlist" : "Add to Watchlist +"}
         </button>
       </div>
     </div>

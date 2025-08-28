@@ -7,7 +7,7 @@ const SearchBar = ({ onSearch }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (query.trim()) {
-      onSearch(query); // Call parent function
+      onSearch(query);
     }
   };
 

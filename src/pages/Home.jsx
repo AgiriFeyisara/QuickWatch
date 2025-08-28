@@ -6,12 +6,11 @@ import Footer from "../components/Footer";
 import movieTitles from "../data/data";
 
 const Home = () => {
-  const [movies, setMovies] = useState([]); // Will hold all movies
+  const [movies, setMovies] = useState([]);
   const [error, setError] = useState("");
 
-  const apiKey = "8b640a2c"; // replace with your key
+  const apiKey = import.meta.env.VITE_OMDB_API_KEY;
 
-  // Load featured/static movies on initial load
   useEffect(() => {
     const fetchInitialMovies = async () => {
       try {
@@ -37,7 +36,6 @@ const Home = () => {
     fetchInitialMovies();
   }, []);
 
-  // Search function
   const handleSearch = async (query) => {
     try {
       const response = await fetch(
@@ -46,10 +44,10 @@ const Home = () => {
       const data = await response.json();
 
       if (data.Response === "True") {
-        setMovies(data.Search); // Update with search results
+        setMovies(data.Search);
         setError("");
       } else {
-        setMovies([]); // Clear previous movies if no results
+        setMovies([]);
         setError(data.Error);
       }
     } catch (err) {
