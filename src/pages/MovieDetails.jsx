@@ -1,19 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Arrow from "../assets/arrow.svg";
+import useAppStore from "../store/useAppStore";
 
 const MovieDetails = () => {
   const { imdbID } = useParams();
   const navigate = useNavigate();
   const [movie, setMovie] = useState(null);
   const [error, setError] = useState("");
-  const [added, setAdded] = useState(false);
 
-  useEffect(() => {
-    // Check if movie is already in watchlist
-    const watchlist = JSON.parse(localStorage.getItem("watchlist")) || [];
-    setAdded(watchlist.some((m) => m.imdbID === imdbID));
-  }, [imdbID]);
+  const { watchlist, addToWatchlist, removeFromWatchlist } = useAppStore();
+
+  const added = watchlist.some((m) => m.imdbID === imdbID);
 
   useEffect(() => {
     const fetchMovie = async () => {
@@ -44,25 +42,6 @@ const MovieDetails = () => {
       `https://www.youtube.com/results?search_query=${query}`,
       "_blank"
     );
-  };
-
-  const toggleWatchlist = () => {
-    const watchlist = JSON.parse(localStorage.getItem("watchlist")) || [];
-    const movieIndex = watchlist.findIndex((m) => m.imdbID === movie.imdbID);
-
-    if (movieIndex >= 0) {
-      // Remove movie
-      watchlist.splice(movieIndex, 1);
-      localStorage.setItem("watchlist", JSON.stringify(watchlist));
-      setAdded(false);
-      alert(`${movie.Title} has been removed from your watchlist.`);
-    } else {
-      // Add movie
-      watchlist.push(movie);
-      localStorage.setItem("watchlist", JSON.stringify(watchlist));
-      setAdded(true);
-      alert(`${movie.Title} has been added to your watchlist!`);
-    }
   };
 
   if (error) return <p className="text-red-500 text-center mt-4">{error}</p>;
@@ -117,12 +96,21 @@ const MovieDetails = () => {
           Watch Trailer
         </button>
 
-        <button
-          className="bg-[#3A86FF] text-white px-4 py-2 rounded hover:bg-blue-600"
-          onClick={toggleWatchlist}
-        >
-          {added ? "Remove from Watchlist" : "Add to Watchlist +"}
-        </button>
+        {added ? (
+          <button
+            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+            onClick={() => removeFromWatchlist(movie.imdbID)}
+          >
+            Remove from Watchlist
+          </button>
+        ) : (
+          <button
+            className="bg-[#3A86FF] text-white px-4 py-2 rounded hover:bg-blue-600"
+            onClick={() => addToWatchlist(movie)}
+          >
+            Add to Watchlist +
+          </button>
+        )}
       </div>
     </div>
   );
