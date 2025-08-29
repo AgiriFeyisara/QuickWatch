@@ -66,7 +66,9 @@ React Router (Navigation)
 
 Tailwind CSS (Styling)
 
-OMDb API (Movie data)
+OMDb API (Movie Apidata)
+
+Zustand (State Management)
 
 Formik (Form Handling)
 
